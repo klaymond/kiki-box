@@ -9,7 +9,7 @@
         <form action="/download" method="GET">
             <p>{{torrent.title}}</p>
             <div class="form-group">
-                <input name="magnet" type="text" class="form-control" id="magnet" value="{{ torrent.magnetlink }}">
+                <input hidden name="magnet" type="text" class="form-control" id="magnet" value="{{ torrent.magnetlink }}">
             </div>
             <button type="submit" class="btn btn-primary">Descargar</button>
         </form>
