@@ -1,13 +1,16 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 import qbittorrentapi
 from decouple import config
+from tpblite import TPB
 
 app = Flask(__name__)
 
 
-@app.route("/download", methods=['POST'])
+@app.route("/download", methods=['GET'])
 def download():
-    content = request.json
+    magnet = request.args.get("magnet")
+    print("magnet")
+    print(magnet)
     qbt = qbittorrentapi.Client(host='http://192.168.15.2', 
                                        port=8080, 
                                        username=config('QBIT_USER'), 
@@ -17,7 +20,8 @@ def download():
     except qbittorrentapi.LoginFailed as e:
         print(e)
     
-    qbt.torrents.add(content['magnet_link'])
+    qbt.torrents.add(magnet)
+    return redirect(url_for('search'))
 
 
 @app.route("/", methods=['GET'])
@@ -27,7 +31,12 @@ def search():
 
 @app.route("/torrents", methods=['GET'])
 def torrents_result():
-    return "Torrent results"
+    search = request.args.get("q")
+    t = TPB()
+    torrents = t.search(search)
+    for torrent in torrents:
+        print(torrent.magnetlink)
+    return render_template("torrents.html", torrents=torrents)
 
 
 if __name__ == '__main__':
