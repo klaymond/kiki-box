@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import qbittorrentapi
 from decouple import config
 
@@ -21,8 +21,13 @@ def download():
 
 
 @app.route("/", methods=['GET'])
-def torrents():
-    pass
+def search():
+    return render_template('index.html')
+
+
+@app.route("/torrents", methods=['GET'])
+def torrents_result():
+    return "Torrent results"
 
 
 if __name__ == '__main__':

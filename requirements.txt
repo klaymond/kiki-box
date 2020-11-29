@@ -1,3 +1,5 @@
 flask
 qbittorrent-api
 python-decouple
+tpblite
+lxml
